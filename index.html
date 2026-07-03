@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Rajab's Cafe — order handcrafted drinks from our cozy home cafe menu."
+    />
+    <title>Rajab's Cafe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="sky-bg" aria-hidden="true">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+    </div>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="logo-badge" aria-hidden="true">☕</div>
+        <div>
+          <h1 id="cafe-name">Rajab's Cafe</h1>
+          <p id="cafe-tagline" class="tagline">A cozy corner for handcrafted sips</p>
+        </div>
+      </div>
+      <button class="cart-toggle" id="cart-toggle" type="button" aria-label="Open order">
+        <span class="cart-icon" aria-hidden="true">🧺</span>
+        <span class="cart-label">Order</span>
+        <span class="cart-count" id="cart-count" hidden>0</span>
+      </button>
+    </header>
+
+    <main class="main-content">
+      <section class="welcome-card">
+        <p>
+          Welcome, neighbour! Browse the menu below, tap a drink to learn more,
+          pick add-ons or cold foam, then add items to your basket.
+        </p>
+      </section>
+
+      <div id="menu-sections" class="menu-grid"></div>
+
+      <section class="extras-section" aria-labelledby="addons-heading">
+        <header class="extras-header">
+          <span class="section-icon" aria-hidden="true">🍯</span>
+          <div>
+            <h2 id="addons-heading">Add-Ons</h2>
+            <p class="section-desc">Tap to select — they'll apply to your next drink.</p>
+          </div>
+        </header>
+        <div class="extras-grid" id="addons-grid"></div>
+      </section>
+
+      <section class="extras-section" aria-labelledby="foam-heading">
+        <header class="extras-header">
+          <span class="section-icon" aria-hidden="true">☁️</span>
+          <div>
+            <h2 id="foam-heading">Cold Foam Options</h2>
+            <p class="section-desc">Choose one foam for your next drink.</p>
+          </div>
+        </header>
+        <div class="extras-grid" id="coldfoam-grid"></div>
+      </section>
+    </main>
+
+    <aside
+      class="cart-panel"
+      id="cart-panel"
+      aria-label="Your order"
+      aria-hidden="true"
+    >
+      <div class="cart-panel-inner">
+        <header class="cart-header">
+          <h2>Your Basket</h2>
+          <button class="cart-close" id="cart-close" type="button" aria-label="Close order">
+            ✕
+          </button>
+        </header>
+        <p class="cart-empty" id="cart-empty">No drinks yet — add something cozy!</p>
+        <ul class="cart-list" id="cart-list" role="list"></ul>
+        <button class="btn-place-order" id="place-order" type="button" disabled>
+          Place Order
+        </button>
+      </div>
+    </aside>
+    <div class="cart-overlay" aria-hidden="true"></div>
+
+    <div class="order-modal" id="order-modal" hidden role="dialog" aria-labelledby="modal-title">
+      <div class="modal-card">
+        <header class="modal-header">
+          <h2 id="modal-title">Order Ready!</h2>
+          <button class="modal-close" id="modal-close" type="button" aria-label="Close">
+            ✕
+          </button>
+        </header>
+        <p class="modal-hint">Share this with your barista or copy it to send over.</p>
+        <pre class="order-summary" id="order-summary"></pre>
+        <button class="btn-copy" id="copy-order" type="button">Copy order</button>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <p>Made with care at home · <span id="year"></span></p>
+      <p class="footer-leaves" aria-hidden="true">🌿 🍃 🌿</p>
+    </footer>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
