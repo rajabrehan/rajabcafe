@@ -121,7 +121,7 @@ export const MENU_SECTIONS = [
       },
       {
         id: "chai-tea",
-        name: "Chai Tea",
+        name: "Pulled Karak Chai (Tea)",
         tags: ["hot-or-iced"],
         description: "Warm spices steeped slow — cinnamon, cardamom, and cozy in every sip.",
       },
@@ -139,7 +139,7 @@ export const MENU_SECTIONS = [
       },
       {
         id: "latte",
-        name: "Latte",
+        name: "Classic Latte",
         tags: ["hot-or-iced"],
         description: "Espresso and steamed milk in perfect harmony. Simple, silky, always right.",
       },
@@ -147,11 +147,11 @@ export const MENU_SECTIONS = [
         id: "kheer-latte",
         name: "Kheer Latte",
         tags: ["hot-or-iced"],
-        description: "Cardamom and sweetness woven into a creamy latte. Dessert meets coffee.",
+        description: "Rice pudding, cardamom, rose water and sweetness woven into a creamy latte. Dessert meets coffee.",
       },
       {
         id: "adeni-latte",
-        name: "Adeni Latte",
+        name: "Mofawar Latte",
         tags: ["hot-or-iced"],
         description: "Yemeni-inspired spiced tea latte with milk. Warm, aromatic, and deeply comforting.",
       },
