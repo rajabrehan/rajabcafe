@@ -1,11 +1,17 @@
-import { CAFE, MENU_SECTIONS, ADD_ONS, COLD_FOAM } from "./menu.js";
+import {
+  CAFE,
+  MENU_SECTIONS,
+  ADD_ONS,
+  TOPPINGS,
+  COLD_FOAM,
+  getDrinkOptions,
+} from "./menu.js";
 
 const cart = [];
 
 const els = {
+  menuNav: document.getElementById("menu-nav"),
   menuSections: document.getElementById("menu-sections"),
-  addOnsGrid: document.getElementById("addons-grid"),
-  coldFoamGrid: document.getElementById("coldfoam-grid"),
   cartList: document.getElementById("cart-list"),
   cartCount: document.getElementById("cart-count"),
   cartEmpty: document.getElementById("cart-empty"),
@@ -24,26 +30,37 @@ const els = {
 
 function init() {
   els.cafeName.textContent = CAFE.name;
-  els.cafeTagline.textContent = CAFE.tagline;
+  els.cafeTagline.textContent = "Drinks Menu";
   els.year.textContent = new Date().getFullYear();
 
+  renderNav();
   renderMenu();
-  renderExtras(ADD_ONS, els.addOnsGrid, "addon");
-  renderExtras(COLD_FOAM, els.coldFoamGrid, "foam");
   bindEvents();
   updateCart();
+}
+
+function renderNav() {
+  els.menuNav.innerHTML = MENU_SECTIONS.map(
+    (s) => `<a class="menu-nav-link" href="#section-${s.id}">${s.icon} ${s.title}</a>`
+  ).join("");
 }
 
 function renderMenu() {
   els.menuSections.innerHTML = MENU_SECTIONS.map((section) => `
     <section class="menu-section" id="section-${section.id}" aria-labelledby="heading-${section.id}">
-      <header class="section-header">
-        <span class="section-icon" aria-hidden="true">${section.icon}</span>
-        <div>
-          <h2 class="section-title" id="heading-${section.id}">${section.title}</h2>
-          <p class="section-desc">${section.description}</p>
+      <div class="section-banner">
+        <div class="section-banner-text">
+          <span class="section-icon" aria-hidden="true">${section.icon}</span>
+          <div>
+            <h2 class="section-title" id="heading-${section.id}">${section.title}</h2>
+            <p class="section-desc">${section.description}</p>
+          </div>
         </div>
-      </header>
+        <div class="section-banner-image img-placeholder" aria-label="${section.imagePlaceholder} placeholder">
+          <span class="img-placeholder-icon" aria-hidden="true">🖼</span>
+          <span class="img-placeholder-label">${section.imagePlaceholder}</span>
+        </div>
+      </div>
       <ul class="drink-list" role="list">
         ${section.drinks.map((drink) => renderDrinkCard(drink, section.id)).join("")}
       </ul>
@@ -52,72 +69,133 @@ function renderMenu() {
 }
 
 function renderDrinkCard(drink, sectionId) {
-  const panelId = `desc-${drink.id}`;
+  const panelId = `panel-${drink.id}`;
+  const opts = getDrinkOptions(drink, sectionId);
+
   return `
     <li class="drink-card" data-drink-id="${drink.id}">
-      <div class="drink-top">
+      <div class="drink-row">
+        <div class="drink-thumb img-placeholder drink-thumb-placeholder" aria-hidden="true">
+          <span class="img-placeholder-icon">☕</span>
+        </div>
+        <div class="drink-row-main">
+          <button
+            class="drink-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="${panelId}"
+            data-toggle="${drink.id}"
+          >
+            <span class="drink-name">${drink.name}</span>
+            <span class="chevron" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="drink-panel" id="${panelId}" hidden>
+        <p class="drink-description">${drink.description}</p>
+
+        ${opts.temperature ? renderOptionGroup("Temperature", renderTempToggle(drink.id), "temp") : ""}
+        ${opts.milk ? renderOptionGroup("Milk", renderMilkToggle(drink.id), "milk") : ""}
+        ${opts.addons ? renderOptionGroup("Add-Ons", renderChipGroup(ADD_ONS, drink.id, "addon"), "addons") : ""}
+        ${opts.toppings ? renderOptionGroup("Toppings", renderChipGroup(TOPPINGS, drink.id, "topping"), "toppings") : ""}
+        ${opts.coldFoam ? renderOptionGroup("Cold Foam", renderChipGroup(COLD_FOAM, drink.id, "foam", true), "foam") : ""}
+
         <button
-          class="drink-toggle"
-          type="button"
-          aria-expanded="false"
-          aria-controls="${panelId}"
-          data-toggle="${drink.id}"
-        >
-          <span class="drink-name">${drink.name}</span>
-          <span class="chevron" aria-hidden="true"></span>
-        </button>
-        <button
-          class="btn-add"
+          class="btn-add-drink"
           type="button"
           data-add="${drink.id}"
           data-name="${drink.name}"
-          aria-label="Add ${drink.name} to order"
+          data-section="${sectionId}"
         >
-          <span aria-hidden="true">+</span>
+          Add to Basket
         </button>
-      </div>
-      <div class="drink-desc-panel" id="${panelId}" hidden>
-        <p>${drink.description}</p>
-        ${drink.tags.includes("hot-or-iced")
-          ? `<p class="drink-note">Available hot or iced — mention your preference when ordering.</p>`
-          : ""}
       </div>
     </li>
   `;
 }
 
-function renderExtras(items, container, type) {
-  container.innerHTML = items.map((item) => `
-    <button
-      class="extra-chip"
-      type="button"
-      data-extra-type="${type}"
-      data-extra-id="${item.id}"
-      data-extra-name="${item.name}"
-      aria-pressed="false"
-    >
-      <span class="extra-name">${item.name}</span>
-      <span class="extra-detail">${item.detail}</span>
-    </button>
-  `).join("");
+function renderOptionGroup(label, content, modifier) {
+  return `
+    <div class="option-group option-group--${modifier}">
+      <h3 class="option-label">${label}</h3>
+      ${content}
+    </div>
+  `;
+}
+
+function renderTempToggle(drinkId) {
+  return `
+    <div class="toggle-group" role="group" aria-label="Temperature">
+      <label class="toggle-pill">
+        <input type="radio" name="temp-${drinkId}" value="iced" checked />
+        <span>Iced</span>
+      </label>
+      <label class="toggle-pill">
+        <input type="radio" name="temp-${drinkId}" value="hot" />
+        <span>Hot</span>
+      </label>
+    </div>
+  `;
+}
+
+function renderMilkToggle(drinkId) {
+  return `
+    <div class="toggle-group" role="group" aria-label="Milk">
+      <label class="toggle-pill">
+        <input type="radio" name="milk-${drinkId}" value="whole" checked />
+        <span>Whole Milk</span>
+      </label>
+      <label class="toggle-pill">
+        <input type="radio" name="milk-${drinkId}" value="0%" />
+        <span>0% Milk</span>
+      </label>
+    </div>
+  `;
+}
+
+function renderChipGroup(items, drinkId, type, singleSelect = false) {
+  return `
+    <div class="chip-grid" data-chip-type="${type}" data-single="${singleSelect}">
+      ${items
+        .map(
+          (item) => `
+        <button
+          class="extra-chip"
+          type="button"
+          data-chip-type="${type}"
+          data-chip-id="${item.id}"
+          data-chip-name="${item.name}"
+          aria-pressed="false"
+        >
+          <span class="extra-name">${item.name}</span>
+          <span class="extra-detail">${item.detail}</span>
+        </button>`
+        )
+        .join("")}
+    </div>
+  `;
 }
 
 function bindEvents() {
   els.menuSections.addEventListener("click", (e) => {
     const toggle = e.target.closest("[data-toggle]");
     if (toggle) {
-      toggleDescription(toggle);
+      togglePanel(toggle);
+      return;
+    }
+
+    const chip = e.target.closest(".extra-chip");
+    if (chip) {
+      handleChipClick(chip);
       return;
     }
 
     const addBtn = e.target.closest("[data-add]");
     if (addBtn) {
-      addDrinkToCart(addBtn.dataset.add, addBtn.dataset.name);
+      addDrinkToCart(addBtn);
     }
   });
-
-  els.addOnsGrid.addEventListener("click", (e) => handleExtraClick(e, "addon"));
-  els.coldFoamGrid.addEventListener("click", (e) => handleExtraClick(e, "foam"));
 
   els.cartToggle.addEventListener("click", () => openCart(true));
   els.cartClose.addEventListener("click", () => openCart(false));
@@ -138,72 +216,110 @@ function bindEvents() {
   });
 }
 
-function toggleDescription(btn) {
-  const panel = document.getElementById(`desc-${btn.dataset.toggle}`);
+function togglePanel(btn) {
+  const card = btn.closest(".drink-card");
+  const panel = document.getElementById(`panel-${btn.dataset.toggle}`);
   const expanded = btn.getAttribute("aria-expanded") === "true";
-  btn.setAttribute("aria-expanded", String(!expanded));
-  panel.hidden = expanded;
-  btn.closest(".drink-card").classList.toggle("is-open", !expanded);
-}
 
-function handleExtraClick(e, type) {
-  const chip = e.target.closest(".extra-chip");
-  if (!chip) return;
-
-  const selected = getSelectedExtras(type);
-  const id = chip.dataset.extraId;
-
-  if (type === "foam") {
-    selected.forEach((s) => {
-      s.el.setAttribute("aria-pressed", "false");
-      s.el.classList.remove("is-selected");
-    });
-    selected.length = 0;
-  }
-
-  const idx = selected.findIndex((s) => s.id === id);
-  if (idx >= 0) {
-    selected.splice(idx, 1);
-    chip.setAttribute("aria-pressed", "false");
-    chip.classList.remove("is-selected");
-  } else {
-    selected.push({ id, name: chip.dataset.extraName, el: chip });
-    chip.setAttribute("aria-pressed", "true");
-    chip.classList.add("is-selected");
-  }
-}
-
-const selectedAddons = [];
-const selectedFoam = [];
-
-function getSelectedExtras(type) {
-  return type === "addon" ? selectedAddons : selectedFoam;
-}
-
-function addDrinkToCart(id, name) {
-  const addons = selectedAddons.map((a) => a.name);
-  const foam = selectedFoam.length ? selectedFoam[0].name : null;
-
-  cart.push({
-    id: `${id}-${Date.now()}`,
-    name,
-    addons: [...addons],
-    foam,
+  document.querySelectorAll(".drink-card.is-open").forEach((openCard) => {
+    if (openCard !== card) {
+      openCard.classList.remove("is-open");
+      const openBtn = openCard.querySelector(".drink-toggle");
+      const openPanel = openCard.querySelector(".drink-panel");
+      openBtn?.setAttribute("aria-expanded", "false");
+      if (openPanel) openPanel.hidden = true;
+    }
   });
 
-  clearSelectedExtras();
+  btn.setAttribute("aria-expanded", String(!expanded));
+  panel.hidden = expanded;
+  card.classList.toggle("is-open", !expanded);
+}
+
+function handleChipClick(chip) {
+  const panel = chip.closest(".drink-panel");
+  const type = chip.dataset.chipType;
+  const grid = chip.closest(".chip-grid");
+  const singleSelect = grid?.dataset.single === "true";
+
+  if (singleSelect) {
+    grid.querySelectorAll(".extra-chip").forEach((c) => {
+      c.setAttribute("aria-pressed", "false");
+      c.classList.remove("is-selected");
+    });
+  }
+
+  const pressed = chip.getAttribute("aria-pressed") === "true";
+  chip.setAttribute("aria-pressed", String(!pressed));
+  chip.classList.toggle("is-selected", !pressed);
+}
+
+function findDrink(drinkId, sectionId) {
+  const section = MENU_SECTIONS.find((s) => s.id === sectionId);
+  return section?.drinks.find((d) => d.id === drinkId);
+}
+
+function readPanelSelections(card, sectionId, drinkId) {
+  const panel = card.querySelector(".drink-panel");
+  const drink = findDrink(drinkId, sectionId);
+  const opts = getDrinkOptions(drink ?? { id: drinkId, tags: [] }, sectionId);
+
+  let temperature = null;
+  let milk = null;
+
+  if (opts.temperature) {
+    const temp = panel.querySelector(`input[name="temp-${drinkId}"]:checked`);
+    temperature = temp?.value ?? "iced";
+  }
+
+  if (opts.milk) {
+    const milkEl = panel.querySelector(`input[name="milk-${drinkId}"]:checked`);
+    milk = milkEl?.value ?? "whole";
+  }
+
+  const addons = [];
+  const toppings = [];
+  let foam = null;
+
+  panel.querySelectorAll('.extra-chip[data-chip-type="addon"].is-selected').forEach((c) => {
+    addons.push(c.dataset.chipName);
+  });
+  panel.querySelectorAll('.extra-chip[data-chip-type="topping"].is-selected').forEach((c) => {
+    toppings.push(c.dataset.chipName);
+  });
+  const foamChip = panel.querySelector('.extra-chip[data-chip-type="foam"].is-selected');
+  if (foamChip) foam = foamChip.dataset.chipName;
+
+  return { temperature, milk, addons, toppings, foam };
+}
+
+function addDrinkToCart(btn) {
+  const { add: drinkId, name, section: sectionId } = btn.dataset;
+  const card = btn.closest(".drink-card");
+  const sel = readPanelSelections(card, sectionId, drinkId);
+
+  cart.push({
+    id: `${drinkId}-${Date.now()}`,
+    name,
+    ...sel,
+  });
+
+  resetPanelSelections(card, sectionId, drinkId);
   updateCart();
   openCart(true);
   pulseCartButton();
 }
 
-function clearSelectedExtras() {
-  [...selectedAddons, ...selectedFoam].forEach((item) => {
-    item.el.setAttribute("aria-pressed", "false");
-    item.el.classList.remove("is-selected");
+function resetPanelSelections(card, sectionId, drinkId) {
+  const panel = card.querySelector(".drink-panel");
+  panel.querySelectorAll(".extra-chip").forEach((c) => {
+    c.setAttribute("aria-pressed", "false");
+    c.classList.remove("is-selected");
   });
-  selectedAddons.length = 0;
-  selectedFoam.length = 0;
+  const iced = panel.querySelector(`input[name="temp-${drinkId}"][value="iced"]`);
+  if (iced) iced.checked = true;
+  const whole = panel.querySelector(`input[name="milk-${drinkId}"][value="whole"]`);
+  if (whole) whole.checked = true;
 }
 
 function updateCart() {
@@ -218,16 +334,18 @@ function updateCart() {
     return;
   }
 
-  els.cartList.innerHTML = cart.map((item, i) => `
+  els.cartList.innerHTML = cart
+    .map(
+      (item, i) => `
     <li class="cart-item">
       <div class="cart-item-main">
-        <span class="cart-item-name">${item.name}</span>
-        ${item.addons.length ? `<span class="cart-item-meta">+ ${item.addons.join(", ")}</span>` : ""}
-        ${item.foam ? `<span class="cart-item-meta">Foam: ${item.foam}</span>` : ""}
+        <span class="cart-item-name">${formatItemName(item)}</span>
+        ${formatItemMeta(item)}
       </div>
       <button class="cart-remove" type="button" data-remove="${i}" aria-label="Remove ${item.name}">✕</button>
-    </li>
-  `).join("");
+    </li>`
+    )
+    .join("");
 
   els.cartList.querySelectorAll("[data-remove]").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -235,6 +353,25 @@ function updateCart() {
       updateCart();
     });
   });
+}
+
+function formatItemName(item) {
+  if (item.temperature) {
+    const prefix = item.temperature === "hot" ? "Hot" : "Iced";
+    const base = item.name.replace(/^(Iced|Hot)\s+/i, "");
+    return `${prefix} ${base}`;
+  }
+  return item.name;
+}
+
+function formatItemMeta(item) {
+  const parts = [];
+  if (item.milk) parts.push(`${item.milk === "0%" ? "0%" : "Whole"} milk`);
+  if (item.addons?.length) parts.push(`+ ${item.addons.join(", ")}`);
+  if (item.toppings?.length) parts.push(`Toppings: ${item.toppings.join(", ")}`);
+  if (item.foam) parts.push(`${item.foam} foam`);
+  if (!parts.length) return "";
+  return `<span class="cart-item-meta">${parts.join(" · ")}</span>`;
 }
 
 function openCart(open) {
@@ -248,13 +385,19 @@ function pulseCartButton() {
   setTimeout(() => els.cartToggle.classList.remove("pulse"), 600);
 }
 
+function formatOrderLine(item, i) {
+  let line = `${i + 1}. ${formatItemName(item)}`;
+  const details = [];
+  if (item.milk) details.push(`${item.milk === "0%" ? "0%" : "Whole"} milk`);
+  if (item.addons?.length) details.push(...item.addons);
+  if (item.toppings?.length) details.push(`Toppings: ${item.toppings.join(", ")}`);
+  if (item.foam) details.push(`${item.foam} foam`);
+  if (details.length) line += ` (${details.join(", ")})`;
+  return line;
+}
+
 function formatOrder() {
-  const lines = cart.map((item, i) => {
-    let line = `${i + 1}. ${item.name}`;
-    if (item.addons.length) line += ` (${item.addons.join(", ")})`;
-    if (item.foam) line += ` [${item.foam} foam]`;
-    return line;
-  });
+  const lines = cart.map(formatOrderLine);
   return `Order for ${CAFE.name}\n\n${lines.join("\n")}\n\nThank you! ☕`;
 }
 

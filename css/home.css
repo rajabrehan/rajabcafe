@@ -1,0 +1,185 @@
+/* ── Home page ── */
+:root {
+  --cream: #fff9f0;
+  --wood-border: #8b6914;
+  --wood-dark: #5c4a3a;
+  --gold: #e9c46a;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Nunito", system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.home-page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-body);
+  color: var(--cream);
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    url("../assets/cafe-bg.png") center center / cover no-repeat;
+  background-color: #3d2e1f;
+}
+
+.hero-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 12, 6, 0.15) 0%,
+    rgba(20, 12, 6, 0.05) 35%,
+    rgba(20, 12, 6, 0.55) 75%,
+    rgba(20, 12, 6, 0.75) 100%
+  );
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(2rem, 8vh, 4rem) 1.5rem 1rem;
+}
+
+.hero-header {
+  text-align: center;
+  animation: fadeDown 0.9s ease both;
+}
+
+.hero-badge {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 0.75rem;
+  font-size: 1.6rem;
+  background: rgba(255, 249, 240, 0.15);
+  border: 2px solid rgba(255, 249, 240, 0.35);
+  border-radius: 50%;
+  backdrop-filter: blur(6px);
+}
+
+.hero-header h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+}
+
+.hero-tagline {
+  margin: 0.5rem 0 0;
+  font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+  font-weight: 400;
+  opacity: 0.92;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+}
+
+.hero-footer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 1.25rem clamp(2rem, 6vh, 3.5rem);
+  animation: fadeUp 0.9s ease 0.2s both;
+}
+
+.btn-enter-menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: min(280px, 85vw);
+  padding: 1rem 2.5rem;
+  font-family: "Fredoka", var(--font-body);
+  font-size: clamp(1.05rem, 3vw, 1.2rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: var(--wood-dark);
+  background: linear-gradient(180deg, #fff 0%, var(--cream) 100%);
+  border: 3px solid var(--gold);
+  border-radius: 999px;
+  box-shadow:
+    0 4px 0 rgba(92, 74, 58, 0.35),
+    0 8px 32px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-enter-menu:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 0 rgba(92, 74, 58, 0.35),
+    0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.btn-enter-menu:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(92, 74, 58, 0.35);
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-content {
+    align-items: center;
+    padding-top: 0;
+  }
+
+  .hero-bg {
+    background-position: center 30%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
