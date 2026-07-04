@@ -56,9 +56,10 @@ function renderMenu() {
             <p class="section-desc">${section.description}</p>
           </div>
         </div>
-        <div class="section-banner-image img-placeholder" aria-label="${section.imagePlaceholder} placeholder">
+        <div class="section-banner-image img-placeholder" aria-label="${section.imagePlaceholder}">
           <span class="img-placeholder-icon" aria-hidden="true">🖼</span>
           <span class="img-placeholder-label">${section.imagePlaceholder}</span>
+          ${section.image ? `<img src="${section.image}" alt="${section.imagePlaceholder}" />` : ""}
         </div>
       </div>
       <ul class="drink-list" role="list">

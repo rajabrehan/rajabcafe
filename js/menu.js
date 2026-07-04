@@ -12,48 +12,49 @@ export const MENU_SECTIONS = [
     icon: "⭐",
     description: "Guest-loved signatures, iced and ready.",
     imagePlaceholder: "Featured drinks collage",
+    image: "assets/thai-tea.jpeg",
     drinks: [
       {
         id: "iced-salted-maple-latte",
         name: "Iced Salted Maple Latte",
         tags: ["iced", "signature"],
         description:
-          "Espresso kissed with maple sweetness and a whisper of sea salt. Creamy, cozy, and just a little indulgent — like autumn in a cup.",
+          "Espresso kissed with maple sweetness and a whisper of sea salt. ",
       },
       {
         id: "iced-kheer-latte",
         name: "Iced Kheer Latte",
         tags: ["iced", "signature"],
         description:
-          "Inspired by classic kheer: cardamom warmth, subtle sweetness, and a silky latte finish. Comforting and nostalgic.",
+          "Inspired by classic kheer: cardamom & rice warmth, subtle sweetness, and a silky latte finish.",
       },
       {
         id: "iced-thai-tea",
         name: "Iced Thai Tea",
         tags: ["iced", "signature"],
         description:
-          "Bold, aromatic Thai tea over ice with creamy sweetness. Spiced, vibrant, and impossible to sip slowly.",
+          "Bold, aromatic Thai tea over ice with creamy milk syrup sweetness. ",
       },
       {
         id: "iced-rooh-afza-matcha",
         name: "Iced Rooh Afza Matcha Latte",
         tags: ["iced", "signature"],
         description:
-          "Floral rooh afza meets earthy matcha in a layered iced latte. Sweet, grassy, and beautifully unexpected.",
+          "Floral rooh afza meets earthy matcha in a layered iced latte.",
       },
       {
         id: "iced-earl-gray-hojicha",
         name: "Iced Earl Gray Hojicha Latte",
         tags: ["iced", "signature"],
         description:
-          "Toasty hojicha blended with bergamot-kissed Earl Gray. Smoky, citrusy, and elegantly balanced.",
+          "Toasty hojicha blended with bergamot-kissed Earl Gray. Smoky, citrusy, and balanced.",
       },
       {
         id: "brazilian-lemonade-fav",
         name: "Brazilian Lemonade",
         tags: ["iced", "signature", "summer"],
         description:
-          "Fresh lime with sweetened condensed milk — tangy, creamy, and wildly refreshing. A sunny-day essential.",
+          "Fresh lime with sweetened condensed milk — tangy, creamy, and wildly refreshing.",
       },
     ],
   },
@@ -61,8 +62,9 @@ export const MENU_SECTIONS = [
     id: "summer",
     title: "Summer Drinks",
     icon: "🌻",
-    description: "Bright, breezy pours for warm afternoons.",
+    description: "Bright, breezy pours for hot sunny afternoons.",
     imagePlaceholder: "Summer drinks photo",
+    image: "assets/summer-drinks.jpeg",
     drinks: [
       {
         id: "brazilian-lemonade",
@@ -100,6 +102,7 @@ export const MENU_SECTIONS = [
     icon: "☕",
     description: "Classics and house specialties, hot or iced.",
     imagePlaceholder: "Barista specials photo",
+    image: "assets/chai-boba.jpg",
     drinks: [
       {
         id: "thai-tea",
@@ -153,7 +156,7 @@ export const MENU_SECTIONS = [
         id: "adeni-latte",
         name: "Mofawar Latte",
         tags: ["hot-or-iced"],
-        description: "Yemeni-inspired spiced tea latte with milk. Warm, aromatic, and deeply comforting.",
+        description: "Yemeni-inspired cardamom & nutmeg tea latte with milk. Warm, aromatic, and deeply comforting.",
       },
     ],
   },
