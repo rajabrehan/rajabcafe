@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/home.css" />
@@ -31,5 +31,19 @@
     <footer class="hero-footer">
       <a class="btn-enter-menu" href="menu.html">Enter Menu</a>
     </footer>
+
+    <div class="page-fade-overlay" aria-hidden="true"></div>
+
+    <script>
+      const enterBtn = document.querySelector(".btn-enter-menu");
+      enterBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const destination = enterBtn.getAttribute("href");
+        document.body.classList.add("is-leaving");
+        setTimeout(() => {
+          window.location.href = destination;
+        }, 550);
+      });
+    </script>
   </body>
 </html>

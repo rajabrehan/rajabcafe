@@ -19,42 +19,49 @@ export const MENU_SECTIONS = [
         name: "Iced Salted Maple Latte",
         tags: ["iced", "signature"],
         description:
-          "Espresso kissed with maple sweetness and a whisper of sea salt. ",
+          "Espresso kissed with maple sweetness and a whisper of sea salt. Creamy, cozy, and just a little indulgent — like autumn in a cup.",
       },
       {
         id: "iced-kheer-latte",
         name: "Iced Kheer Latte",
         tags: ["iced", "signature"],
         description:
-          "Inspired by classic kheer: cardamom & rice warmth, subtle sweetness, and a silky latte finish.",
+          "Inspired by classic kheer: cardamom warmth, subtle sweetness, and a silky latte finish. Comforting and nostalgic.",
       },
       {
         id: "iced-thai-tea",
         name: "Iced Thai Tea",
         tags: ["iced", "signature"],
         description:
-          "Bold, aromatic Thai tea over ice with creamy milk syrup sweetness. ",
+          "Bold, aromatic Thai tea over ice with creamy sweetness. Spiced, vibrant, and impossible to sip slowly.",
       },
       {
         id: "iced-rooh-afza-matcha",
         name: "Iced Rooh Afza Matcha Latte",
         tags: ["iced", "signature"],
         description:
-          "Floral rooh afza meets earthy matcha in a layered iced latte.",
+          "Floral rooh afza meets earthy matcha in a layered iced latte. Sweet, grassy, and beautifully unexpected.",
       },
       {
         id: "iced-earl-gray-hojicha",
         name: "Iced Earl Gray Hojicha Latte",
         tags: ["iced", "signature"],
         description:
-          "Toasty hojicha blended with bergamot-kissed Earl Gray. Smoky, citrusy, and balanced.",
+          "Toasty hojicha blended with bergamot-kissed Earl Gray. Smoky, citrusy, and elegantly balanced.",
       },
       {
         id: "brazilian-lemonade-fav",
         name: "Brazilian Lemonade",
         tags: ["iced", "signature", "summer"],
         description:
-          "Fresh lime with sweetened condensed milk — tangy, creamy, and wildly refreshing.",
+          "Fresh lime with sweetened condensed milk — tangy, creamy, and wildly refreshing. A sunny-day essential.",
+      },
+      {
+        id: "karak-chai-fav",
+        name: "Pulled Karak Chai",
+        tags: ["hot-or-iced", "signature"],
+        description:
+          "Warm spices pulled and steeped slow — cinnamon, cardamom, and cozy in every sip. A guest favourite, hot or over ice.",
       },
     ],
   },
@@ -62,7 +69,7 @@ export const MENU_SECTIONS = [
     id: "summer",
     title: "Summer Drinks",
     icon: "🌻",
-    description: "Bright, breezy pours for hot sunny afternoons.",
+    description: "Bright, breezy pours for warm afternoons.",
     imagePlaceholder: "Summer drinks photo",
     image: "assets/summer-drinks.jpeg",
     drinks: [
@@ -156,7 +163,52 @@ export const MENU_SECTIONS = [
         id: "adeni-latte",
         name: "Mofawar Latte",
         tags: ["hot-or-iced"],
-        description: "Yemeni-inspired cardamom & nutmeg tea latte with milk. Warm, aromatic, and deeply comforting.",
+        description: "Yemeni-inspired spiced tea latte with milk. Warm, aromatic, and deeply comforting.",
+      },
+    ],
+  },
+  {
+    id: "dessert",
+    title: "Desserts",
+    icon: "🍰",
+    description: "Sweet finishes and frozen treats, made in-house.",
+    imagePlaceholder: "Dessert spread photo",
+    image: "assets/dessert.jpeg",
+    drinks: [
+      {
+        id: "thai-tea-custard-ice-cream",
+        name: "Homemade Thai Tea Custard Ice Cream",
+        tags: ["frozen", "signature"],
+        description:
+          "A rich egg yolk custard base churned with bold Thai tea. Silky, creamy, and full of that signature spiced-tea flavour.",
+      },
+      {
+        id: "jasmine-coconut-ice-cream",
+        name: "Homemade Jasmine Coconut Ice Cream",
+        tags: ["frozen", "signature"],
+        description:
+          "A coconut milk base infused with green Thai tea and jasmine, churned into a fragrant, delicately sweet scoop.",
+      },
+      {
+        id: "bala-baiana",
+        name: "Bala Baiana",
+        tags: ["candy"],
+        description:
+          "A Brazilian coconut candy made with condensed milk, coconut, and peanuts, rolled in sugar. Chewy, nutty, and sweet.",
+      },
+      {
+        id: "tres-leches-cake",
+        name: "Tres Leches Cake",
+        tags: ["cake"],
+        description:
+          "Soft sponge cake soaked in three kinds of milk, finished with whipped cream. Light, milky, and irresistibly moist.",
+      },
+      {
+        id: "hwachae-dessert",
+        name: "Hwachae",
+        tags: ["frozen", "iced"],
+        description:
+          "Korean fruit punch with milk — sweet, milky, and studded with fruit. A refreshing dessert in a bowl.",
       },
     ],
   },
@@ -192,9 +244,20 @@ export function getDrinkOptions(drink, sectionId) {
   const isSummer = sectionId === "summer" || drink.tags.includes("summer");
   const isThaiTea = THAI_TEA_IDS.includes(drink.id);
   const isBarista = sectionId === "barista";
+  const isDessert = sectionId === "dessert";
+
+  if (isDessert) {
+    return {
+      temperature: false,
+      milk: false,
+      addons: false,
+      toppings: false,
+      coldFoam: false,
+    };
+  }
 
   return {
-    temperature: isBarista,
+    temperature: isBarista || drink.tags.includes("hot-or-iced"),
     milk: !isSummer && !isThaiTea,
     addons: true,
     toppings: true,
